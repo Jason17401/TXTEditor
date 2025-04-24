@@ -1,0 +1,17 @@
+.textEditor .editor {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 1rem;
+  resize: both;
+  overflow: auto;
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.textEditor .placeholder:empty:before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  pointer-events: none;
+}

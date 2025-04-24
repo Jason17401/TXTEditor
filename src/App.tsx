@@ -1,10 +1,10 @@
-import Editor from "./Editor.tsx";
+import TextEditor from "./TextEditor.tsx";
 import "./App.css";
 
 function App() {
   return (
     <>
-      <Editor />
+      <TextEditor />
     </>
   );
 }

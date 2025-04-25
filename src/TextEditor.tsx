@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "./TextEditor.css";
 
-// TODO: Make placeholder text optional in settings
-
 interface TextEditorSettings {
   minDim?: {
     width: number;

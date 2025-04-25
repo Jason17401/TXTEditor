@@ -1,30 +1,23 @@
-# React + TypeScript + Vite
+# TXTEditor Library
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Features Roadmap
 
-Currently, two official plugins are available:
+Already included and future features to be implemented.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- [x] Basic editor area
+- [] Basic toolbar area
+- [x] Placeholder text in editor
+- [] Custom dimensions sizing in editor and toolbar
+- [] Text formatting toggle buttons in toolbar and shortcut keys
+- [] Unordered and ordered list buttons in toolbar
+- [] Custom text alignment toggle buttons in toolbar
+- [] Semantic headings buttons in toolbar
+- [] Text colour and highlighting buttons in toolbar
+- [] Links creation, edit, and deletion button in toolbar
+- [] Code block and inline code snippets button in toolbar
+- [] Full history stack with undo and redo with buttons in toolbar and shortcut keys
+- [] Image insertion via url or file upload in toolbar
+- [] Passing current written content via props on edit from editor
+- [] Export written content button in toolbar
+- [] Custom colourisation in editor and toolbar
+- [] Make all features optional for future developers via settings and options

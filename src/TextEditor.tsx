@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./TextEditor.css";
 
+// TODO: Make placeholder text optional in settings
+
 interface TextEditorSettings {
   minDim?: {
     width: number;
@@ -8,11 +10,19 @@ interface TextEditorSettings {
   };
 }
 
-interface TextEditorProps {
-  settings?: TextEditorSettings;
+interface TextEditorOptions {
+  placeholder?: string;
 }
 
-export default function TextEditor({ settings }: TextEditorProps): JSX.Element {
+interface TextEditorProps {
+  settings?: TextEditorSettings;
+  options?: TextEditorOptions;
+}
+
+export default function TextEditor({
+  settings,
+  options,
+}: TextEditorProps): JSX.Element {
   const [isFocused, setIsFocused] = useState(false);
 
   const handleFocus = () => {
@@ -20,7 +30,6 @@ export default function TextEditor({ settings }: TextEditorProps): JSX.Element {
   };
 
   const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
-    // TODO: Make the editor not reset when newline is in place but editor is empty
     const editor = event.target as HTMLDivElement;
     if (editor.textContent === "") {
       editor.innerHTML = "";
@@ -38,14 +47,16 @@ export default function TextEditor({ settings }: TextEditorProps): JSX.Element {
           className={`editor${isFocused ? "" : " placeholder"}`}
           role="textbox"
           aria-multiline="true"
-          aria-label="Start typing..."
+          aria-label={
+            options?.placeholder ? options?.placeholder : "Start typing..."
+          }
           style={{
             minWidth: settings?.minDim?.width || 300,
             minHeight: settings?.minDim?.height || 150,
           }}
-          data-placeholder="Start typing..."
+          data-placeholder={options?.placeholder ? options?.placeholder : ""}
           onFocus={handleFocus}
-          onBlur={handleBlur}
+          {...(options?.placeholder ? { onBlur: handleBlur } : {})}
         ></div>
       </div>
     </>

@@ -98,6 +98,7 @@ const createFormatText = (editorRef: React.RefObject<HTMLDivElement>) => {
       return;
 
     const range = selection.getRangeAt(0);
+    if (!range.commonAncestorContainer.parentElement) return;
 
     if (selection.isCollapsed) {
       // Insert format tags at standalone caret
@@ -106,16 +107,61 @@ const createFormatText = (editorRef: React.RefObject<HTMLDivElement>) => {
       range.insertNode(wrapper);
       range.setStart(wrapper.firstChild!, 1);
       range.collapse(true);
+      selection.removeAllRanges();
       selection.addRange(range);
     } else {
       // Text selected format toggling
-      try {
-        const wrapper = document.createElement(format);
-        wrapper.appendChild(range.extractContents());
-        range.insertNode(wrapper);
-      } catch (error) {
-        console.error("Failed to format text", error);
+      const textNodes: Node[] = [];
+      const treeWalker = document.createTreeWalker(
+        range.commonAncestorContainer.parentElement,
+        NodeFilter.SHOW_TEXT,
+        {
+          acceptNode: (node) =>
+            range.intersectsNode(node)
+              ? NodeFilter.FILTER_ACCEPT
+              : NodeFilter.FILTER_REJECT,
+        }
+      );
+
+      while (treeWalker.nextNode()) {
+        textNodes.push(treeWalker.currentNode);
       }
+      if (textNodes.length === 0) return;
+      const isAllTextFormatted = textNodes.every((node) => {
+        const matchedWrapper = node.parentElement?.closest(format) ?? null;
+        return (
+          matchedWrapper !== null &&
+          range.commonAncestorContainer.contains(matchedWrapper)
+        );
+      });
+
+      textNodes.forEach((node) => {
+        const parentElement = node.parentElement;
+        if (!parentElement) return;
+
+        const nodeRange = document.createRange();
+        const selectionStart =
+          node === range.startContainer ? range.startOffset : 0;
+        const selectionEnd =
+          node === range.endContainer ? range.endOffset : (node as Text).length;
+
+        if (selectionStart >= selectionEnd) return;
+
+        nodeRange.setStart(node, selectionStart);
+        nodeRange.setEnd(node, selectionEnd);
+        const selectedText = nodeRange.extractContents();
+
+        if (isAllTextFormatted) {
+          nodeRange.insertNode(selectedText);
+        } else {
+          if (parentElement.tagName.toLowerCase() !== format) {
+            console.log(parentElement, parentElement.tagName);
+            const wrapper = document.createElement(format);
+            wrapper.appendChild(selectedText);
+            nodeRange.insertNode(wrapper);
+          }
+        }
+      });
     }
     editorRef.current?.focus();
   };
